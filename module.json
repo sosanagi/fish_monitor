@@ -1,0 +1,22 @@
+{
+  "shell": {
+      "date": "date",
+      "dsp_set": "export DISPLAY=:0.0",
+      "screensaver_off": "{ xset s off && xset -dpms && xset s noblank && echo 'screensavar on'; } || { echo 'screensavar failed'; }",
+      "monitor_on": "vcgencmd display_power 1",
+      "monitor_off": "vcgencmd display_power 0",
+      "monitor_check": "vcgencmd display_power"
+    },
+  "sql": {
+      "cre_ftime": "CREATE TABLE feed_time(id INTEGER Primary key AUTOINCREMENT, ftime real)",
+      "ins_ftime": "INSERT INTO feed_time(ftime) VALUES (?)",
+      "slt_once_ftime": "SELECT ftime FROM feed_time ORDER BY id DESC LIMIT 1",
+      "slt_img_ftime": "SELECT ftime FROM feed_time WHERE ftime > (?)",
+      "del_one_time": "DELETE FROM feed_time ORDER BY id DESC LIMIT 1",
+      "cre_temp": "CREATE TABLE water_temp(id INTEGER Primary key AUTOINCREMENT, w_temp real,wt_time real)",
+      "ins_temp": "INSERT INTO water_temp(w_temp,wt_time) VALUES (?,?)",
+      "slt_one_temp": "SELECT w_temp,wt_time FROM water_temp ORDER BY id DESC LIMIT 1",
+      "slt_img_temp": "SELECT w_temp,wt_time FROM water_temp WHERE wt_time > (?)",
+      "del_one_temp": "DELETE FROM water_temp ORDER BY id DESC LIMIT 1"
+    }
+}

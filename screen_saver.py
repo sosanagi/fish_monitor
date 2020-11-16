@@ -51,3 +51,10 @@ def start():
             #print("検知")
             time.sleep(300)
             screen_saver()
+
+def main():
+    init()
+    shell_exc(shell_list['monitor_on'])
+
+if __name__ == "__main__":
+    main()

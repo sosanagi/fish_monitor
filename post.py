@@ -2,7 +2,7 @@
 
 import socket
 
-HOST        = 'localhost'
+HOST        = '10.0.0.86'
 PORT        = 51000
 
 def com_send(mess):
@@ -23,4 +23,4 @@ def com_send(mess):
             print ('retry: ' + mess)
 
 if __name__ == "__main__":
-    com_send("temp=23.8\n")
+    com_send("temp=50.8\n")

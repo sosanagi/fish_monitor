@@ -5,7 +5,7 @@ from time import *
 from datetime import datetime
 from socket import socket, AF_INET, SOCK_STREAM
 import threading
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageFile
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import sys
 
@@ -15,13 +15,17 @@ import feed_sql
 import temp_sql
 import screen_saver
 
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+
 FONT_SIZE=30
 IMG_W = 400
 IMG_H = 350
+#PLOT_INTERVAL = 10
 PLOT_INTERVAL = 900
 
 
-HOST = 'localhost'
+HOST = '10.0.0.86'
 PORT = 51000
 MAX_MESSAGE = 2048
 NUM_THREAD = 2
@@ -40,8 +44,9 @@ def main_proc():
     set_frame()
     show_time()
     com_start()
-    #img_read()
-    plot_img()
+
+    img_read()
+    #plot_img()
 
 def set_frame():
     global now_time,feed_time,now_temp,img_canvas,plot_frame
@@ -74,7 +79,7 @@ def set_frame():
     ftime_label = tk.Label(sub_frame,textvariable=feed_time,font=std_font)
     nt_title_label = tk.Label(sub_frame,textvariable=nt_title,font=std_font)
     n_temp_label = tk.Label(sub_frame,textvariable=now_temp,font=std_font)
-    #img_canvas = tk.Canvas(main_frame, width=IMG_W, height=IMG_H,bg="black")
+    img_canvas = tk.Canvas(main_frame, width=IMG_W, height=IMG_H,bg="black")
     feed_button = tk.Button(button_frame, text='給餌', width=15, height=5, command=input_feed_time)
     cansel_button = tk.Button(button_frame, text='取消', width=15, height=5, command=cansel_feed_time)
     time_label = tk.Label(main_frame,textvariable=now_time,font=std_font)
@@ -86,8 +91,8 @@ def set_frame():
     ftitle_label.grid(row=1,column=0,sticky=tk.W)
     mtitle_label.grid(row=1,column=1,sticky=tk.W)
     sub_frame.grid(row=2,column=0,sticky=tk.NW)
-    plot_frame.grid(row=2, column=1,sticky=tk.W)
-    #img_canvas.grid(row=2, column=1)
+    #plot_frame.grid(row=2, column=1,sticky=tk.W)
+    img_canvas.grid(row=2, column=1)
     #close_button.grid(row=1,column=0,sticky=tk.SE)
 
     ftime_label.grid(row=0,column=0,sticky=tk.W,padx=20)
@@ -101,15 +106,21 @@ def set_frame():
 
 
 def img_read():
+    #plot.read_data()
     global fish_img
-    read_img = Image.open('NeonTetra.png')
+
+    #read_img = Image.open('NeonTetra.png')
+    read_img = Image.open('canvas.png')
     rimg_w = read_img.width
     rimg_h = read_img.height
-    read_img = read_img.resize(( int(rimg_w*(IMG_W/rimg_w)),int(rimg_h*(IMG_H/rimg_w)) ))
-    ippy = int((IMG_H - int(rimg_h*(IMG_H/rimg_w))) /2)
+    if rimg_w != 0:
+        read_img = read_img.resize(( int(rimg_w*(IMG_W/rimg_w)),int(rimg_h*(IMG_H/rimg_w)) ))
+        ippy = int((IMG_H - int(rimg_h*(IMG_H/rimg_w))) /2)
 
-    fish_img = ImageTk.PhotoImage(image=read_img)
-    img_canvas.create_image(0, ippy, image=fish_img, anchor=tk.NW)
+        fish_img = ImageTk.PhotoImage(image=read_img)
+        img_canvas.create_image(0, ippy, image=fish_img, anchor=tk.NW)
+
+    top.after(PLOT_INTERVAL*1000, img_read)
 
 def plot_img():
     fig = plot.read_data()
@@ -165,7 +176,7 @@ def com_receive():
 
         except:
             print('Error')
-            break
+            #break
 
     sock.close()
 

@@ -7,9 +7,12 @@ import seaborn as sns
 from datetime import datetime, timedelta
 #from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 #import tkinter as tk
+import time
 
 import temp_sql
 import feed_sql
+
+#plt.rcParams.update({'figure.max_open_warning': 0})
 
 def read_data():
     data=temp_sql.select()
@@ -21,13 +24,9 @@ def read_data():
 
     df = df.set_index('date')
 
-    fig=temp_plot(df)
-
-    return fig
-
+    temp_plot(df)
 
 def temp_plot(df):
-
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
     ax.plot(df)
@@ -71,7 +70,11 @@ def temp_plot(df):
     #plt.vlines(linestyle=":")
     #plt.xticks(rotation=270)
     #plt.plot(df)
-    #plt.show()
+    plt.savefig('canvas.png')
+    plt.close()
 
-    return fig
 
+if __name__ == "__main__":
+    while True:
+        read_data()
+        time.sleep(900)

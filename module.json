@@ -1,7 +1,7 @@
 {
   "shell": {
       "date": "date",
-      "dsp_set": "export DISPLAY=:0.0",
+      "dsp_set": "export DISPLAY=:0",
       "screensaver_off": "{ xset s off && xset -dpms && xset s noblank && echo 'screensavar on'; } || { echo 'screensavar failed'; }",
       "monitor_on": "vcgencmd display_power 1",
       "monitor_off": "vcgencmd display_power 0",
